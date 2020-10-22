@@ -1,10 +1,9 @@
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
-const uuid = require("uuid");
-const { json } = require("express")
+const { json } = require("express");
 
-var app = express();
+const app = express();
 const PORT = process.env.PORT || 7500;
 
 app.use(express.urlencoded({
