@@ -2,12 +2,12 @@ const path = require("path");
 const fs = require("fs");
 const express = require("express");
 const uuid = require("uuid");
-const {json} = require("express")
+const { json } = require("express")
 
 var app = express();
 const PORT = 7500;
 
-app.use(express.urlencoded( {
+app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.static("public"));
@@ -28,7 +28,7 @@ app.get("/api/notes", function (req, res) {
 
 app.post("/api/notes", function (req, res) {
     var body = req.body;
-    body.id = Math.floor(Math.random()*1000)
+    body.id = Math.floor(Math.random() * 1000)
 
     let arrayNote = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
     arrayNote.push(body);
@@ -37,7 +37,18 @@ app.post("/api/notes", function (req, res) {
 });
 
 app.delete("/api/notes/:id", function (req, res) {
-    let deleteNote 
+    const { id } = req.params;
+    var deleteArray = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    console.log(deleteArray);
+    console.log(id);
+    for (i = 0; i < deleteArray.length; i++) {
+        if (id == deleteArray[i].id) {
+            deleteArray.splice(i, 1);
+            fs.writeFileSync("./db/db.json", JSON.stringify(deleteArray), "utf8");
+            res.json(deleteArray);
+            break;
+        }
+    }
 })
 
 app.listen(PORT, function () {
